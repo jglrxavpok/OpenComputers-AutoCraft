@@ -19,5 +19,5 @@ craft_manager.init(senderAddress)
 
 if message == constants.slave_connection_attempt_message then
 	modem.send(senderAddress, constants.slave_port, constants.master_connection_authorization_message)
-	craft_manager.craft("furnace")
+	craft_manager.craft("electronic_circuit", -1)
 end

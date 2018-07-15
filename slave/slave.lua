@@ -40,6 +40,10 @@ while true do
 				craft_slave.put(parts[2], tonumber(parts[3]))
 			elseif action == "craft" then -- craft;<output position>;<amount>
 				craft_slave.performCraft(tonumber(parts[2]), tonumber(parts[3]))
+			elseif action == "move" then
+				local slot1 = tonumber(parts[2])
+				local slot2 = tonumber(parts[3])
+				craft_slave.move(slot1, slot2)
 			end
 		end
 	end

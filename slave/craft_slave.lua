@@ -28,7 +28,7 @@ function craft_slave.find(item_name)
 		if not (index == 1 or index == 2 or index == 3 or index == 5 or index == 6 or index == 7 or index == 9 or index == 10 or index == 11) then
 			local stack = inventory_controller.getStackInInternalSlot(index)
 			if not (stack == nil) then
-				if stack.name == item_name then
+				if stack.name == item_name or (stack.label == item_name) then
 					return "internal", index
 				end
 			end
@@ -40,7 +40,7 @@ function craft_slave.find(item_name)
 			for index = 1, size do
 				local stack = inventory_controller.getStackInSlot(sideEnum.front, index)
 				if not (stack == nil) then
-					if stack.name == item_name then
+					if stack.name == item_name or (stack.label == item_name) then
 						return side, index
 					end
 				end
@@ -53,6 +53,17 @@ function craft_slave.find(item_name)
 	return nil, nil
 end
 
+function print_table(t)
+	for k,v in pairs(t) do
+		print(k..tostring(v))
+	end
+end
+
+function craft_slave.move(slot1, slot2)
+	robot.select(slot1)
+	robot.transferTo(slot2)
+end
+
 function craft_slave.count(item_name)
 	local inventorySize = robot.inventorySize()
 	local count = 0
@@ -60,7 +71,7 @@ function craft_slave.count(item_name)
 		if not (index == 1 or index == 2 or index == 3 or index == 5 or index == 6 or index == 7 or index == 9 or index == 10 or index == 11) then
 			local stack = inventory_controller.getStackInInternalSlot(index)
 			if not (stack == nil) then
-				if stack.name == item_name then
+				if stack.name == item_name or (stack.label == item_name) then
 					count = count+stack.size
 				end
 			end
@@ -72,7 +83,8 @@ function craft_slave.count(item_name)
 			for index = 1, size do
 				local stack = inventory_controller.getStackInSlot(sideEnum.front, index)
 				if not (stack == nil) then
-					if stack.name == item_name then
+					print(stack.label)
+					if stack.name == item_name or (stack.label == item_name) then
 						count = count+stack.size
 					end
 				end
@@ -90,9 +102,9 @@ end
 
 -- Searches and puts (if found) the given item at the given position
 -- Returns "Item not found" if the item wasn't found
-function craft_slave.put(item_name, position)
+function craft_slave.put(item_name, position, metadata)
 	robot.select(position)
-	local side, index = craft_slave.find(item_name)
+	local side, index = craft_slave.find(item_name, metadata)
 	if side == nil then
 		print("Item not found")
 		craft_slave.abortCraft()

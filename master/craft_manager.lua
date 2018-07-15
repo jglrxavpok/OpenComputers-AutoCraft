@@ -18,6 +18,10 @@ function craft_manager.ask(message)
 	return message
 end
 
+function craft_manager.move(slot1, slot2)
+	craft_manager.send("move;"..slot1..";"..slot2)
+end
+
 function craft_manager.count(item)
 	return craft_manager.ask("count;"..item)
 end
@@ -44,9 +48,9 @@ end
 
 -- Returns true if the craft could be done
 -- false otherwise
-function craft_manager.craft(craftname)
+function craft_manager.craft(craftname, outputPosition)
 	local craft = require("crafts."..craftname)
-	return craft(craft_manager)
+	return craft(craft_manager, outputPosition)
 end
 
 return craft_manager
